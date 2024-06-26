@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('role_id')->constrained()->default(2); // Assuming 2 is the default role for a registered user
+            $table->unsignedBigInteger('role_id')->default(2); // Default role for registered users
             $table->rememberToken();
             $table->timestamps();
+
+            // Adding foreign key constraint to 'roles' table
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -39,7 +42,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse drivers the migrations.
      */
     public function down(): void
     {
